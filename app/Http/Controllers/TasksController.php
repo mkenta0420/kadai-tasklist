@@ -37,13 +37,15 @@ class TasksController extends Controller
         
         //バリテーション
         $request->validate([
-            'content' => 'required|max:10',
+            'content' => 'required|max:255',
             'status' => 'required|max:10',
             ]);
          // タスクを作成
         $task = new Task;
         $task->content = $request->content;
+        $task->status = $request->status;
         $task->save();
+        
 
         // トップページへリダイレクトさせる
         return redirect('/');
@@ -61,14 +63,10 @@ class TasksController extends Controller
         ]);
     }
 
-    // getでmessages/（任意のid）/editにアクセスされた場合の「更新画面表示処理」
-    public function edit($id)
+    // getでtasks/（任意のid）/editにアクセスされた場合の「更新画面表示処理」
+    public function edit(Request $request,$id)
     {
         
-        $request->validate([
-            'content' => 'required|max:10',
-            'status' => 'required|max:10',
-            ]);
          // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
 
@@ -82,15 +80,17 @@ class TasksController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'content' => 'required|max:10',
+            'content' => 'required|max:255',
             'status' => 'required|max:10',
             ]);
          // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
-        // メッセージを更新
+        // タスクを更新
         $task->content = $request->content;
+        $task->status = $request->status;
         $task->save();
-
+        
+       
         // トップページへリダイレクトさせる
         return redirect('/');
     }
